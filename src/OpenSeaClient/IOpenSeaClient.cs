@@ -2,6 +2,8 @@
 {
     public interface IOpenSeaClient
     {
+        Task<List<Event>?> GetEventsAsync(GetEventsQueryParams? queryParams = null, CancellationToken ct = default);
+
         /// <summary>
         /// To retrieve assets from our API, call the /assets endpoint with the desired filter parameters.
         /// Please Note: this API endpoint requires an API key in order to use. Please fill out the API request form to obtain one.

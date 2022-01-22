@@ -15,6 +15,44 @@ namespace OpenSeaClient
             _client = client ?? new HttpClient();
         }
 
+        public async Task<List<Event>?> GetEventsAsync(GetEventsQueryParams? queryParams = null, CancellationToken ct = default)
+        {
+            var uriPart = $"events";
+
+            List<(string, string)>? param = null;
+
+            if (queryParams != null)
+            {
+                param = queryParams.ToQueryParameters();
+            }
+
+            var response = await RequestAsync(_baseUrl, uriPart, HttpMethod.Get, queryParams: param, ct: ct);
+
+            var jo = JObject.Parse(response);
+
+            var list = new List<Event>();
+
+            if (jo != null)
+            {
+                var ja = jo.SelectToken("asset_events")?.ToArray();
+
+                if (ja != null)
+                {
+                    foreach (var ji in ja)
+                    {
+                        var item = ji.ToObject<Event>();
+
+                        if (item != null)
+                        {
+                            list.Add(item);
+                        }
+                    }
+                }
+            }
+
+            return list;
+        }
+
         public async Task<List<Asset>?> GetAssetsAsync(GetAssetsQueryParams? queryParams = null, CancellationToken ct = default)
         {
             var uriPart = $"assets";
@@ -28,17 +66,25 @@ namespace OpenSeaClient
 
             var response = await RequestAsync(_baseUrl, uriPart, HttpMethod.Get, queryParams: param, ct: ct);
 
-            var ja = JArray.Parse(response);
+            var jo = JObject.Parse(response);
 
             var list = new List<Asset>();
 
-            foreach (var jo in ja)
+            if (jo != null)
             {
-                var item = jo.ToObject<Asset>();
+                var ja = jo.SelectToken("assets")?.ToArray();
 
-                if (item != null)
+                if (ja != null)
                 {
-                    list.Add(item);
+                    foreach (var ji in ja)
+                    {
+                        var item = ji.ToObject<Asset>();
+
+                        if (item != null)
+                        {
+                            list.Add(item);
+                        }
+                    }
                 }
             }
 
@@ -131,47 +177,36 @@ namespace OpenSeaClient
             Dictionary<string, string>? headers = null,
             CancellationToken ct = default)
         {
-            using var request = BuildRequest(baseUrl, uriPart, method, content, queryParams, headers);
-            using var response = await _client.SendAsync(request, ct);
-            response.EnsureSuccessStatusCode();
-
-            return await response.Content.ReadAsStringAsync(ct);
-        }
-
-        private HttpRequestMessage BuildRequest(
-            string baseUrl,
-            string uriPart,
-            HttpMethod method,
-            HttpContent? content = null,
-            IEnumerable<(string, string)>? queryParams = null,
-            Dictionary<string, string>? headers = null)
-        {
             var uri = new Uri(QueryHelpers.AddQueryString($"{baseUrl}{uriPart}", queryParams));
 
-            var requestMessage = new HttpRequestMessage(method, uri);
+            using var request = new HttpRequestMessage(method, uri);
 
-            requestMessage.Headers.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36");
-            requestMessage.Headers.Add("referrer", uri.AbsoluteUri);
-            
+            request.Headers.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36");
+            request.Headers.Add("referrer", uri.AbsoluteUri);
+
             if (_apiKey != null)
             {
-                requestMessage.Headers.Add("X-Api-Key", _apiKey);
+                request.Headers.Add("X-Api-Key", _apiKey);
             }
 
             if (headers != null)
             {
                 foreach (var header in headers)
                 {
-                    requestMessage.Headers.Add(header.Key, header.Value);
+                    request.Headers.Add(header.Key, header.Value);
                 }
             }
 
             if (content != null)
             {
-                requestMessage.Content = content;
+                request.Content = content;
             }
 
-            return requestMessage;
+            using var response = await _client.SendAsync(request, ct);
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsStringAsync(ct);
         }
     }
 }
