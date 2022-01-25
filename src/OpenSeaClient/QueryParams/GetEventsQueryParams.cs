@@ -80,11 +80,6 @@
                 queryParams.Add(("asset_contract_address", AssetContractAddress));
             }
 
-            if (AssetContractAddress != null)
-            {
-                queryParams.Add(("asset_contract_address", AssetContractAddress));
-            }
-
             if (EventType != null)
             {
                queryParams.Add(("event_type", EventType));
@@ -97,12 +92,12 @@
 
             if (Offset != null)
             {
-                queryParams.Add(("offset", Offset?.ToString() ?? "0"));
+                queryParams.Add(("offset", Offset.Value.ToString() ?? "0"));
             }
 
             if (Limit != null)
             {
-                queryParams.Add(("limit", Limit?.ToString() ?? "20"));
+                queryParams.Add(("limit", Limit.Value.ToString() ?? "20"));
             }
 
             if (CollectionSlug != null)

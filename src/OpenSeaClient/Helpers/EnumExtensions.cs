@@ -3,9 +3,9 @@ using System.Reflection;
 
 namespace OpenSeaClient
 {
-    public static class EnumExtensions
+    internal static class EnumExtensions
     {
-        public static string? GetDescription<T>(this T? value)
+        internal static string? GetDescription<T>(this T? value)
             where T : struct
         {
             Type type = typeof(T);

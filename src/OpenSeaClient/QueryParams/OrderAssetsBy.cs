@@ -2,7 +2,7 @@
 
 namespace OpenSeaClient
 {
-    public enum OrderBy
+    public enum OrderAssetsBy
     {
         /// <summary>
         /// The last sale's transaction's timestamp
@@ -22,5 +22,7 @@ namespace OpenSeaClient
         [Description("sale_price")]
         SalePrice,
 
+        [Description("listing_date")]
+        ListingDate,
     }
 }

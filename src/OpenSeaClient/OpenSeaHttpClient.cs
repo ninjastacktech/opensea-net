@@ -5,14 +5,58 @@ namespace OpenSeaClient
     public class OpenSeaHttpClient : IOpenSeaClient
     {
         private readonly HttpClient _client;
-        private readonly string _baseUrl;
+        private readonly string _baseUrl = "https://api.opensea.io/api/v1/";
+        private readonly string _wyvernUrl = "https://api.opensea.io/wyvern/v1/";
         private readonly string? _apiKey;
 
-        public OpenSeaHttpClient(string? apiKey = null, HttpClient? client = null, string baseUrl = "https://api.opensea.io/api/v1/")
+        public OpenSeaHttpClient(string? apiKey = null, HttpClient? client = null)
         {
             _apiKey = apiKey;
-            _baseUrl = baseUrl;
             _client = client ?? new HttpClient();
+        }
+
+        public async Task<List<Order>?> GetOrdersAsync(GetOrdersQueryParams? queryParams = null, CancellationToken ct = default)
+        {
+            var uriPart = $"orders";
+
+            List<(string, string)>? param = null;
+
+            if (queryParams != null)
+            {
+                param = queryParams.ToQueryParameters();
+            }
+
+            var response = await RequestAsync(_wyvernUrl, uriPart, HttpMethod.Get, queryParams: param, ct: ct);
+
+            var jo = JObject.Parse(response);
+
+            var list = new List<Order>();
+
+            if (jo != null)
+            {
+                var ja = jo.SelectToken("orders")?.ToArray();
+
+                if (ja != null)
+                {
+                    foreach (var ji in ja)
+                    {
+                        var item = ji.ToObject<Order>();
+
+                        if (item != null)
+                        {
+                            if (item.CurrentPrice != null)
+                            {
+                                item.CurrentPriceEth = UnitConversion.Convert.FromWei(
+                                    BigDecimal.Parse(item.CurrentPrice).Mantissa);
+                            }
+
+                            list.Add(item);
+                        }
+                    }
+                }
+            }
+
+            return list;
         }
 
         public async Task<List<Event>?> GetEventsAsync(GetEventsQueryParams? queryParams = null, CancellationToken ct = default)

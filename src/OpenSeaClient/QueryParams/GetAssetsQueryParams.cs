@@ -29,7 +29,7 @@
         /// How to order the assets returned. By default, the API returns the fastest ordering.
         /// Options you can set are sale_date (the last sale's transaction's timestamp), sale_count (number of sales), and sale_price (the last sale's total_price).
         /// </summary>
-        public OrderBy? OrderBy { get; set; }
+        public OrderAssetsBy? OrderBy { get; set; }
 
         /// <summary>
         /// Can be asc for ascending or desc for descending.
@@ -105,12 +105,12 @@
 
             if (Offset != null)
             {
-                queryParams.Add(("offset", Offset?.ToString() ?? "0"));
+                queryParams.Add(("offset", Offset.Value.ToString()));
             }
 
             if (Limit != null)
             {
-                queryParams.Add(("limit", Limit?.ToString() ?? "20"));
+                queryParams.Add(("limit", Limit.Value.ToString()));
             }
 
             if (CollectionSlug != null)

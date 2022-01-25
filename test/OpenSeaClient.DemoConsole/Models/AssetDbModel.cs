@@ -13,5 +13,19 @@
         public string? TraitType { get; set; }
 
         public string? Value { get; set; }
+
+        public string? Url { get; set; }
+
+        public string? ImageUrl { get; set; }
+
+        public string? Name { get; set; }
+
+        public double? Price { get; set; }
+
+        public double? Accumulated { get; set; }
+
+        public bool? IsOnSale { get; set; }
+
+        public bool? IsProcessed { get; set; }
     }
 }

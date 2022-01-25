@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Nethereum.Web3;
 using System.Linq.Expressions;
+using System.Numerics;
 
 namespace OpenSeaClient.DemoConsole
 {
@@ -9,59 +11,111 @@ namespace OpenSeaClient.DemoConsole
         {
             var client = new OpenSeaHttpClient(apiKey: apiKey);
 
+            Console.WriteLine($"Querying for assets... pageSize = 50.");
+
+            var assets = await client.GetAllAssetsAsync(new GetAssetsQueryParams
+            {
+                CollectionSlug = collectionSlug,
+            });
+
+            Console.WriteLine($"Done, got {assets.Count}.");
+
+            Console.WriteLine($"Trying to save {assets.Count} assets in the database...");
+
+            if (assets?.Any() == true)
+            {
+                using var dbContext = new AssetsDbContext();
+                dbContext.Database.EnsureCreated();
+
+                foreach (var asset in assets)
+                {
+                    if (asset.Traits != null)
+                    {
+                        foreach (var trait in asset.Traits)
+                        {
+                            dbContext.Assets.Add(new AssetDbModel
+                            {
+                                CollectionSlug = asset.Collection?.Slug,
+                                ContractAddress = asset.AssetContract?.Address,
+                                TokenId = asset.TokenId,
+                                TraitType = trait.TraitType,
+                                Value = trait.Value,
+                                Name = asset.Name,
+                                ImageUrl = asset.ImageUrl,
+                                Url = $"https://opensea.io/assets/{asset.AssetContract?.Address}/{asset.TokenId}"
+                            });
+                        }
+                    }
+                }
+
+                await dbContext.SaveChangesAsync();
+            }
+
+            Console.WriteLine($"Done.");
+        }
+
+        public static async Task ComputePriceAsync(string apiKey, string collectionSlug)
+        {
+            var client = new OpenSeaHttpClient(apiKey: apiKey);
             using var dbContext = new AssetsDbContext();
             dbContext.Database.EnsureCreated();
 
-            var count = 0;
-            var limit = 50;
-            var it = 0;
+            var web3 = new Web3("https://mainnet.infura.io/v3/ddd5ed15e8d443e295b696c0d07c8b02");
 
-            do
+            var abi = File.ReadAllText(@"C:\Users\User\Desktop\ntflabi.json");
+            var contract = web3.Eth.GetContract(abi, "0x3c8d2fce49906e11e71cb16fa0ffeb2b16c29638");
+            var function = contract.GetFunction("accumulated");
+
+            var assets = await dbContext.Assets.Where(x => x.CollectionSlug == collectionSlug && x.IsProcessed == null).ToListAsync();
+
+            foreach (var group in assets.Where(x => x.TokenId != null).GroupBy(x => x.TokenId).OrderBy(x => x.Key))
             {
-                var assets = await client.GetAssetsAsync(new GetAssetsQueryParams
-                {
-                    CollectionSlug = collectionSlug,
-                    Offset = limit * it,
-                    Limit = limit,
-                });
+                Console.WriteLine($"Processing token {group.Key}...");
 
-                if (assets != null)
-                {
-                    count = assets.Count;
+                var firstAsset = group.FirstOrDefault();
 
-                    foreach (var asset in assets)
+                if (firstAsset != null)
+                {
+                    var orders = await client.GetOrdersAsync(new GetOrdersQueryParams
                     {
-                        if (asset.Traits != null)
+                        AssetContractAddress = firstAsset.ContractAddress,
+                        TokenId = group.Key,
+                        Side = 1,
+                        SaleKind = 0,
+                    });
+
+                    if (orders?.Any() == true)
+                    {
+                        var order = orders.Where(x => x.Cancelled == false).OrderBy(x => x.CurrentPriceEth).FirstOrDefault();
+
+                        if (order != null)
                         {
-                            foreach (var trait in asset.Traits)
+                            Console.WriteLine($"Found token {group.Key} with sell order {order.CurrentPriceEth} ETH");
+
+                            var result = await function.CallAsync<BigInteger>(group.Key);
+                            var ntfl = Web3.Convert.FromWei(result);
+
+                            Console.WriteLine($"Token {group.Key} has {ntfl} NTFL tokens");
+
+                            foreach (var item in group)
                             {
-                                dbContext.Assets.Add(new AssetDbModel
-                                {
-                                    CollectionSlug = asset.Collection?.Slug,
-                                    ContractAddress = asset.AssetContract?.Address,
-                                    TokenId = asset.TokenId,
-                                    TraitType = trait.TraitType,
-                                    Value = trait.Value,
-                                });
+                                item.IsOnSale = true;
+                                item.Price = (double?)order.CurrentPriceEth;
+                                item.Accumulated = (double?)ntfl;
                             }
                         }
                     }
-                    it++;
 
-                    Console.WriteLine($"Get {assets.Count} assets [offset: {limit * it} limit: {limit}]");
-                }
-                else
-                {
-                    break;
-                }
+                    foreach (var item in group)
+                    {
+                        item.IsProcessed = true;
+                    }
 
-                await Task.Delay(1000);
+                    await dbContext.SaveChangesAsync();
+
+                    await Task.Delay(6000);
+                }
             }
-            while (count == 50);
-
-            await dbContext.SaveChangesAsync();
-
-            Console.WriteLine($"Done.");
         }
 
         public static async Task<IEnumerable<string?>> SearchByTraitsAsync(string collectionSlug, params Expression<Func<AssetDbModel, bool>>[] traitFilters)

@@ -29,12 +29,12 @@
 
             if (Offset != null)
             {
-                queryParams.Add(("offset", Offset?.ToString() ?? "0"));
+                queryParams.Add(("offset", Offset.Value.ToString()));
             }
 
             if (Limit != null)
             {
-                queryParams.Add(("limit", Limit?.ToString() ?? "20"));
+                queryParams.Add(("limit", Limit.Value.ToString()));
             }
 
             return queryParams;
