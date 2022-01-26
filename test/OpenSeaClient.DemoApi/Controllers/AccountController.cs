@@ -28,8 +28,8 @@ namespace OpenSeaClient.DemoApi.Controllers
             });
         }
 
-        [HttpGet("~/assets/{owner}/{collectionSlug}")]
-        public Task<List<Asset>?> GetAssets(string owner, string collectionSlug)
+        [HttpGet("~/assets/{collectionSlug}/{owner}")]
+        public Task<List<Asset>?> GetAssets(string collectionSlug, string owner)
         {
             return _openSeaClient.GetAssetsAsync(new GetAssetsQueryParams
             {
