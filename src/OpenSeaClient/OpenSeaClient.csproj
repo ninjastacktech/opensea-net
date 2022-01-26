@@ -4,6 +4,16 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<Description>.NET 6 C# SDK for the OpenSea marketplace</Description>
+	<Authors>Cristi Pufu</Authors>
+	<AssemblyName>OpenSeaClient</AssemblyName>
+	<PackageId>OpenSeaClient</PackageId>
+	<PackageTags>opensea;httpclient;sdk;nft;marketplace</PackageTags>
+	<PackageProjectUrl>https://github.com/ninjastacktech/opensea-net</PackageProjectUrl>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<RepositoryType>git</RepositoryType>
+	<RepositoryUrl>https://github.com/ninjastacktech/opensea-net</RepositoryUrl>
+	<Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
