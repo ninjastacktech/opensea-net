@@ -17,9 +17,17 @@ PM> Install-Package OpenSeaClient -Version 1.0.1
 ```
 # snippets
 
+### DI configuration:
+```C#
+builder.Services.AddHttpClient<IOpenSeaClient, OpenSeaHttpClient>(config =>
+{
+    config.DefaultRequestHeaders.Add("X-Api-Key", "<your_api_key_here>");
+});
+```
+
 ### Get assets in batches of 50 with 1s delay between API calls to avoid throttling:
 ```C#
-var client = new OpenSeaHttpClient(apiKey: "0066a183992746f6bbdb386493edbf10");
+var client = new OpenSeaHttpClient(apiKey: "<your_api_key_here>");
 
 var queryParams = new GetAssetsQueryParams
 {
@@ -59,7 +67,7 @@ while (count == 50);
 Note that the listing price of an asset is equal to the currentPrice of the lowest valid sell order on the asset. 
 Users can lower their listing price without invalidating previous sell orders, so all get shipped down until they're canceled, or one is fulfilled.
 ```C#
-var client = new OpenSeaHttpClient(apiKey: "0066a183992746f6bbdb386493edbf10");
+var client = new OpenSeaHttpClient(apiKey: "<your_api_key_here>");
 
 var orders = await client.GetOrdersAsync(new GetOrdersQueryParams
 {
@@ -75,7 +83,7 @@ if (orders?.Any() == true)
 
     if (order != null)
     {
-        Console.WriteLine($"Token {token} has a sell order of {order.CurrentPriceEth} ETH");                   
+        Console.WriteLine($"Token {tokenId} has a sell order of {order.CurrentPriceEth} ETH");                   
     }
 }
 ```
