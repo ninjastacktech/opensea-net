@@ -1,16 +1,19 @@
-# opensea-net
-
 <img src="https://camo.githubusercontent.com/57cfb2f91adf5c2b206607d801cbf30710614fd4170f05352c75a2d351417ea4/68747470733a2f2f73746f726167652e676f6f676c65617069732e636f6d2f6f70656e7365612d7374617469632f6f70656e7365612d6a732d6c6f676f2d757064617465642e706e67" width="305" height="50" />
+
+---
+
+[![NuGet](https://img.shields.io/nuget/v/OpenSeaClient)](https://www.nuget.org/packages/OpenSeaClient/) 
+[![GitHub](https://img.shields.io/github/license/ninjastacktech/opensea-net)](https://github.com/ninjastacktech/opensea-net/blob/master/LICENSE)
 
 .NET 6 C# SDK for the OpenSea marketplace API.
 
 The API docs can be found here: https://docs.opensea.io/reference/api-overview
 
-[![NuGet](https://img.shields.io/nuget/v/OpenSeaClient)](https://www.nuget.org/packages/OpenSeaClient/) 
-[![GitHub](https://img.shields.io/github/license/ninjastacktech/opensea-net)](https://github.com/ninjastacktech/opensea-net/blob/master/LICENSE)
 
-
-
+# install
+```xml
+PM> Install-Package OpenSeaClient -Version 1.0.1
+```
 # snippets
 
 ### Get assets in batches of 50 with 1s delay between API calls to avoid throttling:
