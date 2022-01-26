@@ -1,51 +1,63 @@
-﻿using Nethereum.Web3;
-using OpenSeaClient;
-using OpenSeaClient.DemoConsole;
-using System.Numerics;
+﻿using OpenSeaClient;
 
 var client = new OpenSeaHttpClient(apiKey: "");
 
-//var assets = await client.GetAssetsAsync(new GetAssetsQueryParams
-//{
-//    AssetContractAddress = "0x986aea67c7d6a15036e18678065eb663fc5be883",
-//    OrderBy = OrderAssetsBy.ListingDate,
-//});
+// Get assets in batches of 50 with 1s delay between API calls to avoid throttling:
 
-//var orders = await client.GetOrdersAsync(new GetOrdersQueryParams
-//{
-//    AssetContractAddress = "0x986aea67c7d6a15036e18678065eb663fc5be883",
-//    TokenId = "3832",
-//    Side = 1,
-//    SaleKind = 0,
-//});
+var queryParams = new GetAssetsQueryParams
+{
+    CollectionSlug = "niftydegen",
+};
+var count = 0;
+var limit = 50;
+var it = 0;
 
-//var events = await client.GetEventsAsync(new GetEventsQueryParams
-//{
-//    AssetContractAddress = "0x986aea67c7d6a15036e18678065eb663fc5be883",
-//    TokenId = "2314",
-//});
+var assetsList = new List<Asset>();
 
-//await Snippets.ImportCollectionAssetsAsync(apiKey: "", collectionSlug: "niftydegen");
+do
+{
+    queryParams.Offset = limit * it;
+    queryParams.Limit = limit;
 
-//var tokenIds = await Snippets.SearchByTraitsAsync(
-//    "metroverse",
-//    //x => x.TraitType == "Buildings: Public" && x.Value == "Metroverse Museum",
-//    //x => x.TraitType == "Buildings: Public" && x.Value == "Police Station",
-//    x => x.TraitType == "Buildings: Industrial" && x.Value == "Wind Farm",
-//    x => x.TraitType == "Buildings: Industrial" && x.Value == "Solar Farm"
+    var assets = await client.GetAssetsAsync(queryParams);
 
-//);
+    if (assets != null)
+    {
+        if (assets.Count > 0)
+        {
+            assetsList.AddRange(assets);
+        }
+    }
+    else
+    {
+        break;
+    }
 
+    await Task.Delay(1000);
+}
+while (count == 50);
 
-//var web3 = new Web3("https://mainnet.infura.io/v3/ddd5ed15e8d443e295b696c0d07c8b02");
+// Get the price of a token's sale order:
 
-//var abi = File.ReadAllText(@"C:\Users\User\Desktop\ntflabi.json");
-//var contract = web3.Eth.GetContract(abi, "0x3c8d2fce49906e11e71cb16fa0ffeb2b16c29638");
-//var function = contract.GetFunction("accumulated");
+var tokenId = "697";
+var contractAddress = "0x986aea67c7d6a15036e18678065eb663fc5be883";
 
-//var result = await function.CallAsync<BigInteger>(7358);
-//var eth = Web3.Convert.FromWei(result);
+var orders = await client.GetOrdersAsync(new GetOrdersQueryParams
+{
+    AssetContractAddress = contractAddress,
+    TokenId = tokenId,
+    Side = 1,
+    SaleKind = 0,
+});
 
- await Snippets.ComputePriceAsync(apiKey: "", collectionSlug: "niftydegen");
+if (orders?.Any() == true)
+{
+    var order = orders.Where(x => x.Cancelled == false).OrderBy(x => x.CurrentPriceEth).FirstOrDefault();
+
+    if (order != null)
+    {
+        Console.WriteLine($"Token {tokenId} has a sell order of {order.CurrentPriceEth} ETH");
+    }
+}
 
 Console.ReadLine();

@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{7F33ECE0-A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenSeaClient.DemoConsole", "test\OpenSeaClient.DemoConsole\OpenSeaClient.DemoConsole.csproj", "{14DB1693-C14A-416A-8F8A-79012A8B56A6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenSeaClient.DemoApi", "test\OpenSeaClient.DemoApi\OpenSeaClient.DemoApi.csproj", "{5C4A1662-CBA8-4932-9CE5-E2B8C29ED698}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{14DB1693-C14A-416A-8F8A-79012A8B56A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14DB1693-C14A-416A-8F8A-79012A8B56A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14DB1693-C14A-416A-8F8A-79012A8B56A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C4A1662-CBA8-4932-9CE5-E2B8C29ED698}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C4A1662-CBA8-4932-9CE5-E2B8C29ED698}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C4A1662-CBA8-4932-9CE5-E2B8C29ED698}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C4A1662-CBA8-4932-9CE5-E2B8C29ED698}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,6 +38,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{C5A872D2-EB1C-42F9-A282-EE5FB303CCDF} = {D2B27878-16B9-45AF-9919-2D956A502926}
 		{14DB1693-C14A-416A-8F8A-79012A8B56A6} = {7F33ECE0-AA43-4B0F-AEEF-47A736C84CDC}
+		{5C4A1662-CBA8-4932-9CE5-E2B8C29ED698} = {7F33ECE0-AA43-4B0F-AEEF-47A736C84CDC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {83860492-2465-47D5-AF92-B15DDAEB70CF}

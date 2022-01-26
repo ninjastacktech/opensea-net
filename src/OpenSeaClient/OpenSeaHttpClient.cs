@@ -9,10 +9,10 @@ namespace OpenSeaClient
         private readonly string _wyvernUrl = "https://api.opensea.io/wyvern/v1/";
         private readonly string? _apiKey;
 
-        public OpenSeaHttpClient(string? apiKey = null, HttpClient? client = null)
+        public OpenSeaHttpClient(HttpClient? client = null, string? apiKey = null)
         {
-            _apiKey = apiKey;
             _client = client ?? new HttpClient();
+            _apiKey = apiKey;
         }
 
         public async Task<List<Order>?> GetOrdersAsync(GetOrdersQueryParams? queryParams = null, CancellationToken ct = default)
@@ -225,10 +225,7 @@ namespace OpenSeaClient
 
             using var request = new HttpRequestMessage(method, uri);
 
-            request.Headers.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36");
-            request.Headers.Add("referrer", uri.AbsoluteUri);
-
-            if (_apiKey != null)
+            if (!string.IsNullOrEmpty(_apiKey))
             {
                 request.Headers.Add("X-Api-Key", _apiKey);
             }

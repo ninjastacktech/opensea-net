@@ -10,7 +10,7 @@
         /// <param name="taskDelayMs"></param>
         /// <returns></returns>
         public static async Task<List<Asset>> GetAllAssetsAsync(
-            this OpenSeaHttpClient client,
+            this IOpenSeaClient client,
             GetAssetsQueryParams queryParams,
             int taskDelayMs = 1000)
         {
