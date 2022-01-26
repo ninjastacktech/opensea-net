@@ -21,8 +21,5 @@ namespace OpenSeaClient
         /// </summary>
         [Description("sale_price")]
         SalePrice,
-
-        [Description("listing_date")]
-        ListingDate,
     }
 }
