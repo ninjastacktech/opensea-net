@@ -13,7 +13,7 @@ The API docs can be found here: https://docs.opensea.io/reference/api-overview
 
 # install
 ```xml
-PM> Install-Package OpenSeaClient -Version 1.0.1
+PM> Install-Package OpenSeaClient -Version 1.0.2
 ```
 # snippets
 
@@ -58,7 +58,7 @@ do
         break;
     }
 
-    await Task.Delay(taskDelayMs);
+    await Task.Delay(1000);
 }
 while (count == 50);
 ```
