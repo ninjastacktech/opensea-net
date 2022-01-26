@@ -2,6 +2,23 @@
 {
     public interface IOpenSeaClient
     {
+        /// <summary>
+        /// Retrieving orders from the OpenSea system.
+        /// Note: this API endpoint requires an API key in order to use.
+        /// </summary>
+        /// <param name="queryParams"></param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        Task<List<Order>?> GetOrdersAsync(GetOrdersQueryParams? queryParams = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// The /events endpoint provides a list of events that occur on the assets that OpenSea tracks.
+        /// The "event_type" field indicates what type of event it is (transfer, successful auction, etc).
+        /// Note: this API endpoint requires an API key in order to use.
+        /// </summary>
+        /// <param name="queryParams"></param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
         Task<List<Event>?> GetEventsAsync(GetEventsQueryParams? queryParams = null, CancellationToken ct = default);
 
         /// <summary>
