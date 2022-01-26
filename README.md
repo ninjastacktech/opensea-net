@@ -3,6 +3,8 @@
 
 The API docs can be found here: https://docs.opensea.io/reference/api-overview
 
+[![NuGet](https://img.shields.io/nuget/v/OpenSeaClient)](https://www.nuget.org/packages/OpenSeaClient/) 
+
 # snippets
 
 ### Get assets in batches of 50 with 1s delay between API calls to avoid throttling:
