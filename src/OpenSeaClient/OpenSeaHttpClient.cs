@@ -12,7 +12,7 @@ namespace OpenSeaClient
         public OpenSeaHttpClient(HttpClient? client = null, string? apiKey = null)
         {
             _client = client ?? new HttpClient();
-            _apiKey = apiKey;
+            _apiKey = apiKey ?? "";
         }
 
         public async Task<List<Order>?> GetOrdersAsync(GetOrdersQueryParams? queryParams = null, CancellationToken ct = default)
@@ -225,10 +225,7 @@ namespace OpenSeaClient
 
             using var request = new HttpRequestMessage(method, uri);
 
-            if (!string.IsNullOrEmpty(_apiKey))
-            {
-                request.Headers.Add("X-Api-Key", _apiKey);
-            }
+            request.Headers.Add("X-Api-Key", _apiKey);
 
             if (headers != null)
             {
