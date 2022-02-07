@@ -102,7 +102,7 @@
 
             if (CollectionSlug != null)
             {
-                queryParams.Add(("collection", CollectionSlug));
+                queryParams.Add(("collection_slug", CollectionSlug));
             }
 
             if (AuctionType != null)
