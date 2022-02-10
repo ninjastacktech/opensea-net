@@ -88,6 +88,12 @@ namespace OpenSeaClient
 
                         if (item != null)
                         {
+                            if (item.TotalPrice != null)
+                            {
+                                item.TotalPriceEth = UnitConversion.Convert.FromWei(
+                                    BigDecimal.Parse(item.TotalPrice).Mantissa);
+                            }
+
                             list.Add(item);
                         }
                     }

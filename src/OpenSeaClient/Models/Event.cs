@@ -37,6 +37,8 @@ namespace OpenSeaClient
         [JsonProperty("total_price")]
         public string? TotalPrice { get; set; }
 
+        public decimal? TotalPriceEth { get; set; }
+
         [JsonProperty("quantity")]
         public string? Quantity { get; set; }
 
