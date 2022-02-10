@@ -9,5 +9,8 @@ namespace OpenSeaClient
 
         [JsonProperty("profile_image_url")]
         public string? ProfileImageUrl { get; set; }
+
+        [JsonProperty("user")]
+        public User User { get; set; }
     }
 }
