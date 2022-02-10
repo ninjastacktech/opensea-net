@@ -13,7 +13,7 @@
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<RepositoryType>git</RepositoryType>
 	<RepositoryUrl>https://github.com/ninjastacktech/opensea-net</RepositoryUrl>
-	<Version>1.0.5</Version>
+	<Version>1.0.6</Version>
   </PropertyGroup>
 
   <ItemGroup>
