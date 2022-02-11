@@ -4,6 +4,8 @@ namespace OpenSeaClient
 {
     public class OpenSeaHttpClient : IOpenSeaClient
     {
+        public const string ApiKeyHeaderName = "X-Api-Key";
+
         private readonly HttpClient _client;
         private readonly string _baseUrl = "https://api.opensea.io/api/v1/";
         private readonly string _wyvernUrl = "https://api.opensea.io/wyvern/v1/";
@@ -231,7 +233,10 @@ namespace OpenSeaClient
 
             using var request = new HttpRequestMessage(method, uri);
 
-            request.Headers.Add("X-Api-Key", _apiKey);
+            if (!_client.DefaultRequestHeaders.Contains(ApiKeyHeaderName))
+            {
+                request.Headers.Add(ApiKeyHeaderName, _apiKey);
+            }
 
             if (headers != null)
             {
