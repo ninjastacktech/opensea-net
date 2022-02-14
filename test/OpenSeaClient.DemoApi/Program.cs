@@ -10,6 +10,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddHttpClient<IOpenSeaClient, OpenSeaHttpClient>(config =>
 {
+    // Replace with your OpenSea API Key or comment this line
     config.DefaultRequestHeaders.Add("X-Api-Key", builder.Configuration["OpenSeaApiKey"]);
 });
 
@@ -20,6 +21,8 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+
+app.UseRouting();
 
 app.UseAuthorization();
 
