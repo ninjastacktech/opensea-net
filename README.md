@@ -13,7 +13,7 @@ The API docs can be found here: https://docs.opensea.io/reference/api-overview
 
 # install
 ```xml
-PM> Install-Package OpenSeaClient -Version 1.0.3
+PM> Install-Package OpenSeaClient -Version 1.0.7
 ```
 # snippets
 
