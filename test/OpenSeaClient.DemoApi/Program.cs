@@ -23,6 +23,16 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapGet("/",  ctx =>
+    {
+        ctx.Response.Redirect("swagger");
+
+        return Task.CompletedTask;
+    });
+});
+
 app.MapControllers();
 
 app.Run();
