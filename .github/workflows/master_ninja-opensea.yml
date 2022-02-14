@@ -24,11 +24,11 @@ jobs:
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
-        working-directory: .\test\OpenSeaClient.DemoConsole\
+        working-directory: .\test\OpenSeaClient.DemoApi\
         
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}\demo
-        working-directory: .\test\OpenSeaClient.DemoConsole\
+        working-directory: .\test\OpenSeaClient.DemoApi\
         
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
