@@ -11,6 +11,6 @@ namespace OpenSeaClient
         public string? ProfileImageUrl { get; set; }
 
         [JsonProperty("user")]
-        public User User { get; set; }
+        public User? User { get; set; }
     }
 }

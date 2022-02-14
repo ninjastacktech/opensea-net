@@ -10,17 +10,14 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddHttpClient<IOpenSeaClient, OpenSeaHttpClient>(config =>
 {
-    //config.DefaultRequestHeaders.Add("X-Api-Key", "<your_api_key_here>");
+    config.DefaultRequestHeaders.Add("X-Api-Key", builder.Configuration["OpenSeaApiKey"]);
 });
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
