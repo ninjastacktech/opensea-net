@@ -14,6 +14,23 @@ builder.Services.AddHttpClient<IOpenSeaClient, OpenSeaHttpClient>(config =>
     config.DefaultRequestHeaders.Add("X-Api-Key", builder.Configuration["OpenSeaApiKey"]);
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(cors =>
+    {
+        var url = builder.Configuration["CrossOriginUrl"];
+
+        if (!string.IsNullOrEmpty(url))
+        {
+            cors.WithOrigins(url);
+        }
+        else
+        {
+            cors.AllowAnyHeader();
+        }
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
