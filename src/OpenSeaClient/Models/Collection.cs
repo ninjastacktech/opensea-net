@@ -93,5 +93,8 @@ namespace OpenSeaClient
 
         [JsonProperty("wiki_url")]
         public string? WikiUrl { get; set; }
+
+        [JsonProperty("primary_asset_contracts")]
+        public List<AssetContract>? AssetContracts { get; set; }
     }
 }
