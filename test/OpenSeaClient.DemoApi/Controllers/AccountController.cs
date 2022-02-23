@@ -28,6 +28,18 @@ namespace OpenSeaClient.DemoApi.Controllers
             });
         }
 
+        [HttpGet("~/collection/{collectionSlug}/stats")]
+        public Task<CollectionStats?> GetCollectionStats(string collectionSlug)
+        {
+            return _openSeaClient.GetCollectionStatsAsync(collectionSlug);
+        }
+
+        [HttpGet("~/collection/{collectionSlug}")]
+        public Task<Collection?> GetCollection(string collectionSlug)
+        {
+            return _openSeaClient.GetCollectionAsync(collectionSlug);
+        }
+
         [HttpGet("~/assets/{collectionSlug}/{owner}")]
         public Task<List<Asset>?> GetAssets(string collectionSlug, string owner)
         {
