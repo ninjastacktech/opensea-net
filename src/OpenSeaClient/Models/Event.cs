@@ -11,7 +11,7 @@ namespace OpenSeaClient
         public Asset? Asset { get; set; }
 
         [JsonProperty("asset_bundle")]
-        public string? AssetBundle { get; set; }
+        public AssetBundle? AssetBundle { get; set; }
 
         [JsonProperty("created_date")]
         public DateTime? CreatedDate { get; set; }
